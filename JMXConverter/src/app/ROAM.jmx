@@ -1,0 +1,1544 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jmeterTestPlan jmeter="4.0 r1823414" properties="4.0" version="1.2">
+  <hashTree>
+    <TestPlan enabled="true" guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan">
+      <stringProp name="TestPlan.comments"/>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp elementType="Arguments" enabled="true" guiclass="ArgumentsPanel" name="TestPlan.user_defined_variables" testclass="Arguments" testname="User Defined Variables">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"/>
+    </TestPlan>
+    <hashTree>
+      <ConfigTestElement enabled="true" guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+        <elementProp elementType="Arguments" enabled="true" guiclass="HTTPArgumentsPanel" name="HTTPsampler.Arguments" testclass="Arguments" testname="User Defined Variables">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path"/>
+        <boolProp name="HTTPSampler.image_parser">true</boolProp>
+        <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
+        <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+        <stringProp name="HTTPSampler.implementation">Java</stringProp>
+        <stringProp name="HTTPSampler.connect_timeout">60000</stringProp>
+        <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
+      </ConfigTestElement>
+      <hashTree/>
+      <CookieManager enabled="true" guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager">
+        <collectionProp name="CookieManager.cookies"/>
+        <boolProp name="CookieManager.clearEachIteration">true</boolProp>
+      </CookieManager>
+      <hashTree/>
+      <ThreadGroup enabled="true" guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - TCM001_Buy_Insurance">
+        <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
+        <elementProp elementType="LoopController" enabled="true" guiclass="LoopControlPanel" name="ThreadGroup.main_controller" testclass="LoopController" testname="Loop Controller">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(users,50)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rampup,150)}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${__P(duration,180)}</stringProp>
+        <stringProp name="ThreadGroup.delay"/>
+      </ThreadGroup>
+      <hashTree>
+        <TransactionController enabled="true" guiclass="TransactionControllerGui" testclass="TransactionController" testname="TCM001_Buy_Insurance">
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
+          <boolProp name="TransactionController.parent">false</boolProp>
+        </TransactionController>
+        <hashTree>
+          <JSR223Sampler enabled="true" guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="set loop uuid">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"/>
+            <stringProp name="parameters"/>
+            <stringProp name="script">import uuid
+### create THREAD_LOOP_UUID (unique per loop)
+vars.putObject('THREAD_LOOP_UUID', str(uuid.uuid1()))
+
+import random
+random_thread_number = random.randrange(1, ctx.getThreadGroup().getNumThreads() + 1)
+vars.putObject('random_thread_number', random_thread_number)
+
+### create THREAD_ID (unique per thread)
+THREAD_ID = vars.getObject('THREAD_ID')
+if not THREAD_ID:
+    vars.putObject('THREAD_ID', str(uuid.uuid1()))
+
+
+</stringProp>
+            <stringProp name="scriptLanguage">jython</stringProp>
+          </JSR223Sampler>
+          <hashTree/>
+          <UserParameters enabled="true" guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters">
+            <collectionProp name="UserParameters.names">
+              <stringProp name="-1058984565">START_DATE</stringProp>
+              <stringProp name="-1757720398">END_DATE</stringProp>
+              <stringProp name="67863">DOB</stringProp>
+              <stringProp name="-363468715">START_DATE_UPD</stringProp>
+              <stringProp name="-217309188">END_DATE_UPD</stringProp>
+            </collectionProp>
+            <collectionProp name="UserParameters.thread_values">
+              <collectionProp name="867358802">
+                <stringProp name="1540138095">${__RandomDate(,2018-10-01,2018-12-31,,)}</stringProp>
+                <stringProp name="-541813721">${__timeShift(yyyy-MM-dd,${START_DATE},P${__Random(1,14,)}D,,)}</stringProp>
+                <stringProp name="-902636208">${__RandomDate(,1948-01-01,1999-01-01,,)}</stringProp>
+                <stringProp name="772449028">${__timeShift(yyyy-MM-dd,${START_DATE},P1D,,)}</stringProp>
+                <stringProp name="-517961347">${__timeShift(yyyy-MM-dd,${END_DATE},P1D,,)}</stringProp>
+              </collectionProp>
+            </collectionProp>
+            <boolProp name="UserParameters.per_iteration">true</boolProp>
+          </UserParameters>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Tell us a bit about the trip"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_001_OPEN_MAIN_PAGE">
+              <elementProp elementType="Arguments" enabled="true" guiclass="HTTPArgumentsPanel" name="HTTPsampler.Arguments" testclass="Arguments">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"/>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Upgrade-Insecure-Requests">
+                    <stringProp name="Header.name">Upgrade-Insecure-Requests</stringProp>
+                    <stringProp name="Header.value">1</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Cache-Control">
+                    <stringProp name="Header.name">Cache-Control</stringProp>
+                    <stringProp name="Header.value">max-age=0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_002_GET_COVER_ITEMS">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:GET_COVER_ITEMS","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"/>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_003_GET_COUNTRIES">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:GET_COUNTRIES","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"trip_type":"single"}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="COUNTRIE">
+                <stringProp name="JSONPostProcessor.referenceNames">COUNTRIE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload[*]</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers">0</stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Who's going on the trip?"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_004_POST_ORDER">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_ORDER","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"id":null,"tcm_order_id":null,"number":null,"trip_type":"single","countries":["${COUNTRIE}"],"region":null,"start_date":"${START_DATE}T21:00:00.000Z","end_date":"${END_DATE}T21:00:00.000Z","user_id":null,"cover_type":"essential","total_price":null,"basic_price":null,"smart_price":null,"platinum_price":null,"has_medication":null,"has_past_medical_treatment":null,"is_waiting_medical_treatment":null,"is_unaware_of_possible_claims":false,"is_registered_with_medical":false,"has_all_travellers_from_uk":false,"has_all_adults_travellers":false,"is_aware_no_cover_for_preexisting_condition":false,"net_price":null,"gross_price":null,"discount_code":""}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="POLICY_ID">
+                <stringProp name="JSONPostProcessor.referenceNames">POLICY_ID</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.id</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="ORDER_ID">
+                <stringProp name="JSONPostProcessor.referenceNames">ORDER_ID</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.tcm_order_id</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="REGION">
+                <stringProp name="JSONPostProcessor.referenceNames">REGION</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.region</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Cover details"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_005_POST_TRAVELLERS">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_TRAVELLERS","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":[{"id":null,"policy_id":${POLICY_ID},"user_id":null,"main_traveller":true,"first_name":"","last_name":"","email":"","phone":"","dob":"${DOB}T22:00:00.000Z","golf":0,"gross_without_addons":0,"winter_sport":0,"wedding":0,"cruise_cover":0,"sport_activities_grade_2":0,"sport_activities_grade_3":0,"sport_activities_grade_4":0,"is_golf_covered":false,"is_winter_sports_covered":false,"is_wedding_covered":false,"is_cruise_covered":false,"is_sport_activities_grade_2_covered":false,"is_sport_activities_grade_3_covered":false,"is_sport_activities_grade_4_covered":false,"cancellation_coverage":500,"baggage_coverage":500,"excess_coverage":150,"is_covered_for_medical_conditions":false,"has_declared_medical_conditions":false}]}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="USER_ID">
+                <stringProp name="JSONPostProcessor.referenceNames">USER_ID</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.user_id</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="TOTAL_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">TOTAL_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.total_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="BASIC_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">BASIC_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.basic_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="SMART_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">SMART_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.smart_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="PLATINUM_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">PLATINUM_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.platinum_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="NET_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">NET_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.net_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="GROSS_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">GROSS_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.gross_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="TRAVELLER_ID">
+                <stringProp name="JSONPostProcessor.referenceNames">TRAVELLER_ID</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].id</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="GOLF">
+                <stringProp name="JSONPostProcessor.referenceNames">GOLF</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].golf</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="GROSS_WITHOUT_ADDONS">
+                <stringProp name="JSONPostProcessor.referenceNames">GROSS_WITHOUT_ADDONS</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].gross_without_addons</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="WINTER_SPORT">
+                <stringProp name="JSONPostProcessor.referenceNames">WINTER_SPORT</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].winter_sport</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="WEDDING">
+                <stringProp name="JSONPostProcessor.referenceNames">WEDDING</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].wedding</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="CRUISE_COVER">
+                <stringProp name="JSONPostProcessor.referenceNames">CRUISE_COVER</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].cruise_cover</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="SPORT_ACTIVITIES_GRADE_2">
+                <stringProp name="JSONPostProcessor.referenceNames">SPORT_ACTIVITIES_GRADE_2</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].sport_activities_grade_2</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="SPORT_ACTIVITIES_GRADE_3">
+                <stringProp name="JSONPostProcessor.referenceNames">SPORT_ACTIVITIES_GRADE_3</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].sport_activities_grade_3</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="SPORT_ACTIVITIES_GRADE_4">
+                <stringProp name="JSONPostProcessor.referenceNames">SPORT_ACTIVITIES_GRADE_4</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.travellers[*].sport_activities_grade_4</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_006_GET_PRICING_VARIATIONS">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:GET_PRICING_VARIATIONS","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"id":${POLICY_ID},"tcm_order_id":"${ORDER_ID}","number":null,"trip_type":"single","countries":["${COUNTRIE}"],"region":"${REGION}","start_date":"${START_DATE}T22:00:00.000Z","end_date":"${END_DATE}T22:00:00.000Z","user_id":${USER_ID},"cover_type":"essential","total_price":${TOTAL_PRICE},"basic_price":${BASIC_PRICE},"smart_price":${SMART_PRICE},"platinum_price":${PLATINUM_PRICE},"has_medication":null,"has_past_medical_treatment":null,"is_waiting_medical_treatment":null,"is_unaware_of_possible_claims":false,"is_registered_with_medical":false,"has_all_travellers_from_uk":false,"has_all_adults_travellers":false,"is_aware_no_cover_for_preexisting_condition":false,"net_price":${NET_PRICE},"gross_price":${GROSS_PRICE},"discount_code":""}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Any existing medical conditions"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_007_POST_ORDER">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_ORDER","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"id":${POLICY_ID},"tcm_order_id":"${ORDER_ID}","number":null,"trip_type":"single","countries":["${COUNTRIE}"],"region":"${REGION}","start_date":"${START_DATE}T22:00:00.000Z","end_date":"${END_DATE}T22:00:00.000Z","user_id":${USER_ID},"cover_type":"essential","total_price":${TOTAL_PRICE},"basic_price":${BASIC_PRICE},"smart_price":${SMART_PRICE},"platinum_price":${PLATINUM_PRICE},"has_medication":null,"has_past_medical_treatment":null,"is_waiting_medical_treatment":null,"is_unaware_of_possible_claims":false,"is_registered_with_medical":false,"has_all_travellers_from_uk":false,"has_all_adults_travellers":false,"is_aware_no_cover_for_preexisting_condition":false,"net_price":${NET_PRICE},"gross_price":${GROSS_PRICE},"discount_code":""}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Need any extra coverage?"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_008_POST_ORDER">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_ORDER","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"id":${POLICY_ID},"tcm_order_id":"${ORDER_ID}","number":null,"trip_type":"single","countries":["${COUNTRIE}"],"region":"${REGION}","start_date":"${START_DATE}T23:00:00.000Z","end_date":"${END_DATE}T23:00:00.000Z","user_id":${USER_ID},"cover_type":"essential","total_price":${TOTAL_PRICE},"basic_price":${BASIC_PRICE},"smart_price":${TOTAL_PRICE},"platinum_price":${PLATINUM_PRICE},"has_medication":false,"has_past_medical_treatment":false,"is_waiting_medical_treatment":false,"is_unaware_of_possible_claims":false,"is_registered_with_medical":false,"has_all_travellers_from_uk":false,"has_all_adults_travellers":false,"is_aware_no_cover_for_preexisting_condition":false,"net_price":${NET_PRICE},"gross_price":${GROSS_PRICE},"discount_code":""}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Your declaration"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_009_POST_TRAVELLERS">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_TRAVELLERS","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":[{"id":${TRAVELLER_ID},"policy_id":${POLICY_ID},"user_id":${USER_ID},"main_traveller":true,"first_name":"","last_name":"","email":"","phone":"","dob":"${DOB}T22:00:00.000Z","golf":${GOLF},"gross_without_addons":${GROSS_WITHOUT_ADDONS},"winter_sport":${WINTER_SPORT},"wedding":${WEDDING},"cruise_cover":${CRUISE_COVER},"sport_activities_grade_2":${SPORT_ACTIVITIES_GRADE_2},"sport_activities_grade_3":${SPORT_ACTIVITIES_GRADE_3},"sport_activities_grade_4":${SPORT_ACTIVITIES_GRADE_4},"is_golf_covered":false,"is_winter_sports_covered":false,"is_wedding_covered":false,"is_cruise_covered":false,"is_sport_activities_grade_2_covered":false,"is_sport_activities_grade_3_covered":false,"is_sport_activities_grade_4_covered":false,"cancellation_coverage":500,"baggage_coverage":500,"excess_coverage":150,"is_covered_for_medical_conditions":false,"has_declared_medical_conditions":false}]}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="TOTAL_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">TOTAL_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.total_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="BASIC_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">BASIC_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.basic_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="SMART_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">SMART_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.smart_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="PLATINUM_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">PLATINUM_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.platinum_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="NET_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">NET_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.net_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSONPostProcessor enabled="true" guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="GROSS_PRICE">
+                <stringProp name="JSONPostProcessor.referenceNames">GROSS_PRICE</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.payload.order.gross_price</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"/>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Tell us about the lead traveller"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_010_POST_ORDER">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_ORDER","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"id":${POLICY_ID},"tcm_order_id":"${ORDER_ID}","number":null,"trip_type":"single","countries":["${COUNTRIE}"],"region":"${REGION}","start_date":"${START_DATE_UPD}T00:00:00.000Z","end_date":"${END_DATE_UPD}T00:00:00.000Z","user_id":${USER_ID},"cover_type":"essential","total_price":${TOTAL_PRICE},"basic_price":${BASIC_PRICE},"smart_price":${SMART_PRICE},"platinum_price":${PLATINUM_PRICE},"has_medication":false,"has_past_medical_treatment":false,"is_waiting_medical_treatment":false,"is_unaware_of_possible_claims":true,"is_registered_with_medical":true,"has_all_travellers_from_uk":true,"has_all_adults_travellers":true,"is_aware_no_cover_for_preexisting_condition":true,"net_price":${NET_PRICE},"gross_price":${GROSS_PRICE},"discount_code":""}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Here is a summary of your coverage"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_011_POST_TRAVELLERS">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_TRAVELLERS","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":[{"id":${TRAVELLER_ID},"policy_id":${POLICY_ID},"user_id":${USER_ID},"main_traveller":true,"first_name":"AFA","last_name":"ASF","email":"asdfs@ee.ee","phone":"1234567","dob":"${DOB}T22:00:00.000Z","golf":${GOLF},"gross_without_addons":${GROSS_WITHOUT_ADDONS},"winter_sport":${WINTER_SPORT},"wedding":${WEDDING},"cruise_cover":${CRUISE_COVER},"sport_activities_grade_2":${SPORT_ACTIVITIES_GRADE_2},"sport_activities_grade_3":${SPORT_ACTIVITIES_GRADE_3},"sport_activities_grade_4":${SPORT_ACTIVITIES_GRADE_4},"is_golf_covered":false,"is_winter_sports_covered":false,"is_wedding_covered":false,"is_cruise_covered":false,"is_sport_activities_grade_2_covered":false,"is_sport_activities_grade_3_covered":false,"is_sport_activities_grade_4_covered":false,"cancellation_coverage":500,"baggage_coverage":500,"excess_coverage":150,"is_covered_for_medical_conditions":false,"has_declared_medical_conditions":false}]}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Lets get your billing details"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_011_POST_ORDER">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:POST_ORDER","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"id":${POLICY_ID},"tcm_order_id":"${ORDER_ID}","number":null,"trip_type":"single","countries":["${COUNTRIE}"],"region":"${REGION}","start_date":"${START_DATE_UPD}T01:00:00.000Z","end_date":"${END_DATE_UPD}T01:00:00.000Z","user_id":${USER_ID},"cover_type":"essential","total_price":${TOTAL_PRICE},"basic_price":${BASIC_PRICE},"smart_price":${SMART_PRICE},"platinum_price":${PLATINUM_PRICE},"has_medication":false,"has_past_medical_treatment":false,"is_waiting_medical_treatment":false,"is_unaware_of_possible_claims":true,"is_registered_with_medical":true,"has_all_travellers_from_uk":true,"has_all_adults_travellers":true,"is_aware_no_cover_for_preexisting_condition":true,"net_price":${NET_PRICE},"gross_price":${GROSS_PRICE},"discount_code":""}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_012_PAYMENT_FORM">
+              <elementProp elementType="Arguments" enabled="true" guiclass="HTTPArgumentsPanel" name="HTTPsampler.Arguments" testclass="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="orderId">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">orderId</stringProp>
+                    <stringProp name="Argument.value">${ORDER_ID}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="app">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">app</stringProp>
+                    <stringProp name="Argument.value">roam</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"/>
+              <stringProp name="HTTPSampler.path">/ingenico-payment/form</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Upgrade-Insecure-Requests">
+                    <stringProp name="Header.name">Upgrade-Insecure-Requests</stringProp>
+                    <stringProp name="Header.value">1</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <RegexExtractor enabled="true" guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="ACCOUNT_PSPID">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">ACCOUNT_PSPID</stringProp>
+                <stringProp name="RegexExtractor.regex">name="ACCOUNT\.PSPID" value="(.*)"</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"/>
+                <stringProp name="RegexExtractor.match_number"/>
+              </RegexExtractor>
+              <hashTree/>
+              <RegexExtractor enabled="true" guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="SHASIGNATURE_SHASIGN">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">SHASIGNATURE_SHASIGN</stringProp>
+                <stringProp name="RegexExtractor.regex">name="SHASIGNATURE\.SHASIGN" value="(.*)"</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"/>
+                <stringProp name="RegexExtractor.match_number"/>
+              </RegexExtractor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy enabled="false" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="362 /Tokenization/HostedPage">
+              <elementProp elementType="Arguments" enabled="true" guiclass="HTTPArgumentsPanel" name="HTTPsampler.Arguments" testclass="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="ACCOUNT.PSPID">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">ACCOUNT.PSPID</stringProp>
+                    <stringProp name="Argument.value">${ACCOUNT_PSPID}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="ALIAS.ORDERID">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">ALIAS.ORDERID</stringProp>
+                    <stringProp name="Argument.value">${ORDER_ID}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="LAYOUT.LANGUAGE">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">LAYOUT.LANGUAGE</stringProp>
+                    <stringProp name="Argument.value">en_EN</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CARD.PAYMENTMETHOD">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CARD.PAYMENTMETHOD</stringProp>
+                    <stringProp name="Argument.value">CreditCard</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="SHASIGNATURE.SHASIGN">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">SHASIGNATURE.SHASIGN</stringProp>
+                    <stringProp name="Argument.value">${SHASIGNATURE_SHASIGN}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="PARAMETERS.ACCEPTURL">
+                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                    <stringProp name="Argument.name">PARAMETERS.ACCEPTURL</stringProp>
+                    <stringProp name="Argument.value">https://apps.qa.tcmoney.io/ingenico-payment/accept?app=roam</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="PARAMETERS.EXCEPTIONURL">
+                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                    <stringProp name="Argument.name">PARAMETERS.EXCEPTIONURL</stringProp>
+                    <stringProp name="Argument.value">https://apps.qa.tcmoney.io/ingenico-payment/exception?app=roam</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="DisplayForm">
+                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                    <stringProp name="Argument.name">DisplayForm</stringProp>
+                    <stringProp name="Argument.value">Display+Form</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">ogone.test.v-psp.com</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/Tokenization/HostedPage</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/ingenico-payment/form?orderId=${ORDER_ID}&amp;app=roam</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Upgrade-Insecure-Requests">
+                    <stringProp name="Header.name">Upgrade-Insecure-Requests</stringProp>
+                    <stringProp name="Header.value">1</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/x-www-form-urlencoded</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <RegexExtractor enabled="true" guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="HASHPARAMETER">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">HASHPARAMETER</stringProp>
+                <stringProp name="RegexExtractor.regex">name="CreditCardInputModel\.HashParameter" type="hidden" value="(\S*)"</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"/>
+                <stringProp name="RegexExtractor.match_number"/>
+              </RegexExtractor>
+              <hashTree/>
+              <RegexExtractor enabled="true" guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="ALIASID">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">ALIASID</stringProp>
+                <stringProp name="RegexExtractor.regex">name="CreditCardInputModel\.AliasId" type="hidden" value="(\S*)"</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"/>
+                <stringProp name="RegexExtractor.match_number"/>
+              </RegexExtractor>
+              <hashTree/>
+              <RegexExtractor enabled="true" guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="PSPID">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">PSPID</stringProp>
+                <stringProp name="RegexExtractor.regex">name="CreditCardInputModel\.PspId" type="hidden" value="(\S*)"</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"/>
+                <stringProp name="RegexExtractor.match_number"/>
+              </RegexExtractor>
+              <hashTree/>
+              <RegexExtractor enabled="true" guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="WORKFLOWID">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">WORKFLOWID</stringProp>
+                <stringProp name="RegexExtractor.regex">name="CreditCardInputModel\.WorkflowId" type="hidden" value="(\S*)"</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"/>
+                <stringProp name="RegexExtractor.match_number"/>
+              </RegexExtractor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+          <GenericController enabled="true" guiclass="LogicControllerGui" testclass="GenericController" testname="Final screen"/>
+          <hashTree>
+            <HTTPSamplerProxy enabled="false" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="384 /Tokenization/HostedPage/ProcessCreditCardForm">
+              <elementProp elementType="Arguments" enabled="true" guiclass="HTTPArgumentsPanel" name="HTTPsampler.Arguments" testclass="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.HashParameter">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.HashParameter</stringProp>
+                    <stringProp name="Argument.value">${HASHPARAMETER}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.AliasId">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.AliasId</stringProp>
+                    <stringProp name="Argument.value">${ALIASID}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.PspId">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.PspId</stringProp>
+                    <stringProp name="Argument.value">${PSPID}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.ExcludedPaymentMethods">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.ExcludedPaymentMethods</stringProp>
+                    <stringProp name="Argument.value"/>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.ExceptionUrl">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.ExceptionUrl</stringProp>
+                    <stringProp name="Argument.value">https%3A%2F%2Fapps.qa.tcmoney.io%2Fingenico-payment%2Fexception%3Fapp%3Droam</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.StorePermanently">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.StorePermanently</stringProp>
+                    <stringProp name="Argument.value"/>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.ParamPlus">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.ParamPlus</stringProp>
+                    <stringProp name="Argument.value"/>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.CreditDebit">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.CreditDebit</stringProp>
+                    <stringProp name="Argument.value"/>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.Brand">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.Brand</stringProp>
+                    <stringProp name="Argument.value"/>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.WorkflowId">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.WorkflowId</stringProp>
+                    <stringProp name="Argument.value">${WORKFLOWID}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.OrderId">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.OrderId</stringProp>
+                    <stringProp name="Argument.value">${ORDER_ID}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.CardNumber">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.CardNumber</stringProp>
+                    <stringProp name="Argument.value">4000024329596391</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.CardHolderName">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.CardHolderName</stringProp>
+                    <stringProp name="Argument.value">St%C3%A9phanie+O%27test-name</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.CardExpirationMonth">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.CardExpirationMonth</stringProp>
+                    <stringProp name="Argument.value">01</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.CardExpirationYear">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.CardExpirationYear</stringProp>
+                    <stringProp name="Argument.value">2020</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                  <elementProp elementType="HTTPArgument" name="CreditCardInputModel.Cvc">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">CreditCardInputModel.Cvc</stringProp>
+                    <stringProp name="Argument.value">111</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">ogone.test.v-psp.com</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"/>
+              <stringProp name="HTTPSampler.path">/Tokenization/HostedPage/ProcessCreditCardForm</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+              <stringProp name="TestPlan.comments">Detected the start of a redirect chain</stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://ogone.test.v-psp.com/Tokenization/HostedPage</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Upgrade-Insecure-Requests">
+                    <stringProp name="Header.name">Upgrade-Insecure-Requests</stringProp>
+                    <stringProp name="Header.value">1</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/x-www-form-urlencoded</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy enabled="true" guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="001_013_CHECK_PAYMENT_SUCCESS">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp elementType="Arguments" name="HTTPsampler.Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp elementType="HTTPArgument" name="">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{"action":"ROAM:CHECK_PAYMENT_SUCCESS","meta":{"sessionToken":"sessin-token","actionId":"action-id","appVersion":"asdfasd"},"data":{"id":${POLICY_ID},"tcm_order_id":"${ORDER_ID}","number":null,"trip_type":"single","countries":["${COUNTRIE}"],"region":"${REGION}","start_date":"${START_DATE_UPD}T01:00:00.000Z","end_date":"${END_DATE_UPD}T01:00:00.000Z","user_id":${USER_ID},"cover_type":"essential","total_price":${TOTAL_PRICE},"basic_price":${BASIC_PRICE},"smart_price":${SMART_PRICE},"platinum_price":${PLATINUM_PRICE},"has_medication":false,"has_past_medical_treatment":false,"is_waiting_medical_treatment":false,"is_unaware_of_possible_claims":true,"is_registered_with_medical":true,"has_all_travellers_from_uk":true,"has_all_adults_travellers":true,"is_aware_no_cover_for_preexisting_condition":true,"net_price":${NET_PRICE},"gross_price":${GROSS_PRICE},"discount_code":""}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">apps.qa.tcmoney.io</stringProp>
+              <stringProp name="HTTPSampler.port">443</stringProp>
+              <stringProp name="HTTPSampler.protocol">https</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
+              <stringProp name="HTTPSampler.path">/roam-buy-funnel/api</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"/>
+              <stringProp name="HTTPSampler.connect_timeout"/>
+              <stringProp name="HTTPSampler.response_timeout"/>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager enabled="true" guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp elementType="Header" name="Referer">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">https://apps.qa.tcmoney.io/roam-buy-funnel</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Language">
+                    <stringProp name="Header.name">Accept-Language</stringProp>
+                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Content-Type">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept-Encoding">
+                    <stringProp name="Header.name">Accept-Encoding</stringProp>
+                    <stringProp name="Header.value">gzip, deflate, br</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="User-Agent">
+                    <stringProp name="Header.name">User-Agent</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0</stringProp>
+                  </elementProp>
+                  <elementProp elementType="Header" name="Accept">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">*/*</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TestAction enabled="true" guiclass="TestActionGui" testclass="TestAction" testname="Pause">
+            <intProp name="ActionProcessor.action">1</intProp>
+            <intProp name="ActionProcessor.target">0</intProp>
+            <stringProp name="ActionProcessor.duration">${__Random(2000,5000)}</stringProp>
+          </TestAction>
+          <hashTree/>
+        </hashTree>
+      <JSR223Assertion enabled="true" guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="Python main assertion">
+<stringProp name="cacheKey">true</stringProp>
+<stringProp name="filename"/>
+<stringProp name="parameters"/>
+<stringProp name="script">from __future__ import unicode_literals
+import re
+
+# # # # #  @@@@STANDART VARIABLES
+
+SubResults_array = SampleResult.getSubResults()
+SubResults_count = len(SubResults_array)
+http_response_code = SampleResult.getResponseCode()
+vars.putObject(&amp;apos;RAW_HTTP_TRACE&amp;apos;, &amp;apos;&amp;apos;)
+
+# # # # # @@@@STANDART ASSERTION@@@@@
+
+def return_non_binary_response_body(result_instance, data_size):
+    if result_instance.getDataType() == &amp;apos;bin&amp;apos;:
+        return &amp;apos;skipped binary data&amp;apos;
+    else:
+        if data_size == &amp;apos;all&amp;apos;:
+            ## logged in non binary data
+            return result_instance.getResponseDataAsString()      
+        elif data_size == &amp;apos;reduced&amp;apos;:
+            ## logged in non binary data and reduce size to 100kB
+            return result_instance.getResponseDataAsString()[:102400]
+
+if SubResults_count &amp;gt; 0:
+    ## --==get subsamples data in case of redirects or download extra turned ON==--
+    ## limit to 5 subresults in case testing with extra resources
+    http_response_data = &amp;apos;&amp;apos;
+    for SubResult in SubResults_array:
+        http_response_data += SubResult.getResponseHeaders() + return_non_binary_response_body(SubResult, &amp;apos;all&amp;apos;)
+else:
+    http_response_data = SampleResult.getResponseHeaders() + return_non_binary_response_body(SampleResult, &amp;apos;all&amp;apos;)
+
+    
+## --==http response code check==--
+if http_response_code[0] in (&amp;apos;4&amp;apos;, &amp;apos;5&amp;apos;):
+    AssertionResult.setFailure(True)
+    AssertionResult.setFailureMessage(&amp;apos;HTTP response code &amp;apos; + http_response_code)
+## --==non http response code check==--
+elif http_response_code[0] not in (&amp;apos;1&amp;apos;, &amp;apos;2&amp;apos;, &amp;apos;3&amp;apos;):
+    AssertionResult.setFailure(True)
+    AssertionResult.setFailureMessage(SampleResult.getResponseMessage().replace(&amp;apos;Non HTTP response message: &amp;apos;, &amp;apos;&amp;apos;))
+
+elif http_response_code == &amp;apos;304&amp;apos;:
+    pass
+
+# # # # # @@@@END OF STANDART ASSERTION@@@@@
+
+# # # # # @@@@CUSTOM ASSERTION@@@@@@START
+
+## --==extractions check==--
+## --==verifications check==-- 
+
+## --==put full http trace into log==--
+def compose_full_http_trace_message():
+    full_http_trace = &amp;apos;&amp;apos;
+    if SubResults_count &amp;gt; 0:
+        for SubResult in SubResults_array:
+            full_http_trace += &amp;apos;@@@request_data_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; +  SubResult.getSamplerData()[:1024**2] + &amp;apos;@@@request_headers_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; + SubResult.getRequestHeaders() + &amp;apos;@@@request_headers_end&amp;apos;
+            full_http_trace += &amp;apos;@@@response_headers_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; + SubResult.getResponseHeaders() + &amp;apos;@@@response_body_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; + return_non_binary_response_body(SubResult, &amp;apos;reduced&amp;apos;) + &amp;apos;@@@response_body_end&amp;apos;
+    else:
+        full_http_trace += &amp;apos;@@@request_data_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; + SampleResult.getSamplerData()[:1024**2] + &amp;apos;@@@request_headers_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; + SampleResult.getRequestHeaders() + &amp;apos;@@@request_headers_end&amp;apos;
+        full_http_trace += &amp;apos;@@@response_headers_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; + SampleResult.getResponseHeaders() + &amp;apos;@@@response_body_start&amp;gt;&amp;gt;&amp;gt;&amp;apos; + return_non_binary_response_body(SampleResult, &amp;apos;reduced&amp;apos;) + &amp;apos;@@@response_body_end&amp;apos;
+
+    AssertionResult.setFailureMessage(unicode(AssertionResult.getFailureMessage()).replace(&amp;apos;~&amp;apos;, &amp;apos;@tilda&amp;apos;))
+    ## --==write to log http trace==--
+    vars.putObject(&amp;apos;RAW_HTTP_TRACE&amp;apos;, &amp;apos;@@@raw_trace_start&amp;apos; + repr(full_http_trace) + &amp;apos;@@@raw_trace_end&amp;apos;)
+thread_number = vars.getObject(&amp;apos;random_thread_number&amp;apos;)
+threads_to_track_all_flow = 1
+threads_to_track_errors = 200
+
+if thread_number &amp;lt;= threads_to_track_all_flow:
+    compose_full_http_trace_message()
+elif thread_number &amp;lt;= threads_to_track_all_flow + threads_to_track_errors:
+    if AssertionResult.isFailure():
+        compose_full_http_trace_message()</stringProp>
+<stringProp name="scriptLanguage">jython</stringProp>
+</JSR223Assertion>
+</hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
